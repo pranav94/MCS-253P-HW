@@ -20,7 +20,7 @@ struct Song music_library[SONGMAX];
 int current_number_of_songs = 0;
 char fileName[] = "myMusic";
 
-int get_next_chunk_after_delimiter(char *line, int endIndex)
+int get_next_chunk_after_delimiter(char *line, unsigned int endIndex)
 {
     for (; endIndex < strlen(line); endIndex++)
     {
@@ -32,9 +32,9 @@ int get_next_chunk_after_delimiter(char *line, int endIndex)
 
 struct Song read_song(char *line)
 {
-    int beginIndex, endIndex;
+    unsigned int beginIndex, endIndex;
     char year[5];
-    struct Song song = {0};
+    struct Song song = {"", "", 1900};
 
     beginIndex = endIndex = get_next_chunk_after_delimiter(line, 0);
     strncpy(song.title, line, endIndex);
@@ -183,7 +183,6 @@ void delete_song()
 
 void store_MusicLibrary()
 {
-    char line[LINEMAX];
     ofstream musicLibrary;
 
     musicLibrary.open(fileName);
