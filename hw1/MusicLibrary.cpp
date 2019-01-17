@@ -82,7 +82,7 @@ void add_song_to_MusicLibrary(Song song)
     current_number_of_songs++;
 }
 
-void load_MusicLibrary(char *fileName)
+void load_MusicLibrary()
 {
     char line[LINEMAX];
     ifstream musicLibrary;
@@ -95,9 +95,13 @@ void load_MusicLibrary(char *fileName)
 
 char read_command()
 {
-    char input;
+    char input = '\n';
     cout << "Please enter a command to continue. (i=Insert, p=Print, q=Quit, d=Delete, l=Lookup)" << endl;
-    cin >> input;
+    while (input == '\n' || input == '\t' || input == ' ')
+        input = getchar();
+    while (getchar() != '\n')
+    {
+    }
     return input;
 }
 
@@ -107,9 +111,9 @@ struct Song get_song_details()
     char year[5];
 
     cout << "Enter the title of the song: ";
-    cin >> song.title;
+    cin.getline(song.title, STRMAX);
     cout << "Enter the artist's name: ";
-    cin >> song.artist;
+    cin.getline(song.artist, STRMAX);
     cout << "Enter the year of publication: ";
     cin >> year;
     song.year_published = atoi(year);
@@ -144,7 +148,7 @@ void lookup_song()
 {
     char title[STRMAX];
     cout << "Enter the title of the song to lookup: ";
-    cin >> title;
+    cin.getline(title, STRMAX);
     int index = find_index_of_song_with_name(title);
     if (index != -1)
         print_song(music_library[index]);
@@ -184,7 +188,6 @@ void delete_song()
 void store_MusicLibrary()
 {
     ofstream musicLibrary;
-
     musicLibrary.open(fileName);
     for (int i = 0; i < current_number_of_songs; i++)
         musicLibrary << music_library[i].title << DELIMITER << music_library[i].artist << DELIMITER << music_library[i].year_published << endl;
@@ -235,7 +238,7 @@ int main(int argc, char **argv)
         strcpy(fileName, argv[1]);
 
     cout << "\nWelcome to your Music Library: " << fileName << "!\n\n";
-    load_MusicLibrary(fileName);
+    load_MusicLibrary();
     for (;;)
         evaluate_command(read_command());
 
